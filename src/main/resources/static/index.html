@@ -29,9 +29,7 @@
 <table id="incidentTable">
     <thead>
     <tr>
-        <th>Incident Key</th>
-        <th>Boro</th>
-        <th>Race</th>
+        <th>Incident List</th>
     </tr>
     </thead>
     <tbody>
@@ -66,15 +64,7 @@
                 const incidentKeyCell = document.createElement('td');
                 incidentKeyCell.textContent = incident.INCIDENT_KEY !== undefined ? incident.INCIDENT_KEY : JSON.stringify(incident);
 
-                const boroCell = document.createElement('td');
-                boroCell.textContent = incident.BORO !== undefined ? incident.BORO : JSON.stringify(incident);
-
-                const raceCell = document.createElement('td');
-                raceCell.textContent = incident.VIC_RACE !== undefined ? incident.VIC_RACE : JSON.stringify(incident);
-
                 row.appendChild(incidentKeyCell);
-                row.appendChild(boroCell);
-                row.appendChild(raceCell);
 
                 tableBody.appendChild(row);
             });
