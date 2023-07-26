@@ -3,3 +3,6 @@ spring:
     mongodb:
       uri : mongodb+srv://CCT:12345@maincluster.11lkinl.mongodb.net/?retryWrites=true&w=majority
       database : Incident
+
+server:
+  port: 8081

@@ -4,24 +4,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Incident Data</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Login Page</title>
+    <link rel="stylesheet" href="login.css">
 </head>
 
 <body>
-<h1>Incident Data</h1>
-<table id="incidentTable">
-    <thead>
-    <tr>
-        <th>Incident List</th>
-    </tr>
-    </thead>
-    <tbody>
-    <!-- Data will be dynamically added here -->
-    </tbody>
-</table>
+<div class="login-container">
+    <h1>Login</h1>
+    <form id="loginForm" onsubmit="authenticate(event)">
+        <label for="UserName">Username/Email:</label>
+        <input type="text" id="UserName" name="UserName" required>
 
-<script src="script.js"></script>
+        <label for="Password">Password:</label>
+        <input type="Password" id="Password" name="Password" required>
+
+        <button type="submit">Login</button>
+    </form>
+</div>
+
+<script src="login.js"></script>
 </body>
 
 </html>
