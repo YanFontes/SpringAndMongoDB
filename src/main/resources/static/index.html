@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Incident Data</title>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
 <h1>Incident Data</h1>
 <table id="incidentTable">
     <thead>
     <tr>
-        <th>Incident List</th>
+        <th>Incident Key</th>
+        <th>Date</th>
+        <th>Race</th>
+        <th>Sex</th>
+        <th>Borough</th>
+        <th>Precinct</th>
     </tr>
     </thead>
     <tbody>
@@ -21,7 +24,24 @@
     </tbody>
 </table>
 
+<!-- Add "Add" button and incident form -->
+<button id="addButton">Add Incident</button>
+<div id="incidentForm" style="display: none;">
+    <label for="incidentKey">Incident Key:</label>
+    <input type="text" id="incidentKey" name="incidentKey" required>
+    <label for="incidentDate">Date:</label>
+    <input type="date" id="incidentDate" name="incidentDate" required>
+    <label for="victimRace">Race:</label>
+    <input type="text" id="victimRace" name="victimRace" required>
+    <label for="victimSex">Sex:</label>
+    <input type="text" id="victimSex" name="victimSex" required>
+    <label for="borough">Borough:</label>
+    <input type="text" id="borough" name="borough" required>
+    <label for="precinct">Precinct:</label>
+    <input type="number" id="precinct" name="precinct" required>
+    <button id="submitButton">Submit</button>
+</div>
+
 <script src="script.js"></script>
 </body>
-
 </html>
