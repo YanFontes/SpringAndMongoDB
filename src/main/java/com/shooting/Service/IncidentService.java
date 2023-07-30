@@ -23,6 +23,8 @@ public class IncidentService {
         return repository.save(incident);
     }
 
+
+
     //2 READ ALL
     public List<Incident> findAllIncidents() {
         return repository.findAll();
