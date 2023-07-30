@@ -2,6 +2,7 @@ package com.shooting.Service;
 
 import com.shooting.Model.Incident;
 import com.shooting.Repository.IncidentRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
