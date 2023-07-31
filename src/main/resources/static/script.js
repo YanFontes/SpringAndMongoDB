@@ -27,11 +27,15 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Function to display data in the table
+    // Function to display data in the table
     function displayData(data) {
         const tableBody = document.querySelector('#incidentTable tbody');
         tableBody.innerHTML = ''; // Clear the table body before appending new data
 
-        data.forEach(incident => {
+        // Check if data is an array or a single object
+        const dataArray = Array.isArray(data) ? data : [data];
+
+        dataArray.forEach(incident => {
             const row = document.createElement('tr');
 
             // Display each property in the table cells
@@ -51,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
             tableBody.appendChild(row);
         });
     }
+
 
     // Function to display an error message in the table if data fetching fails
     function displayErrorMessage() {
@@ -112,6 +117,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Function to fetch data based on search criteria
+    function searchIncident(incidentKey) {
+        fetch(`/Incident/key/${incidentKey}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => displayData(data))
+            .catch(error => {
+                console.error('Error searching data:', error);
+                displayErrorMessage();
+            });
+    }
+
     // Show incident form when "Add" button is clicked
     const addButton = document.getElementById('addButton');
     const incidentForm = document.getElementById('incidentForm');
@@ -143,6 +164,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Here, you can send the newIncident object to your server using fetch() or other methods to save it to the database.
         saveIncident(newIncident);
+    });
+
+    // Handle search button click
+    const searchButton = document.getElementById('searchButton');
+    searchButton.addEventListener('click', () => {
+        const searchKeyInput = document.getElementById('searchKey');
+        const searchKey = searchKeyInput.value.trim();
+
+        // Check if the searchKey is not empty before making the search request
+        if (searchKey !== '') {
+            searchIncident(searchKey);
+        } else {
+            fetchData(); // If search bar is empty, fetch all incidents again to reset the table
+        }
     });
 
     // Fetch data on page load

@@ -51,5 +51,11 @@ public class IncidentController {
         return service.deleteIncident(incidentId);
     }
 
+    //UAT
+    @GetMapping("/key/{incidentId}")
+    public  Incident getIncidentByIncidentID(@PathVariable String incidentId) {
+        return service.getIncidentByIncidentID(incidentId);
+    }
+
 }
 

@@ -11,6 +11,7 @@ public interface IncidentRepository extends MongoRepository<Incident, String> {
 
     @Query("{BORO: ?0}")
     List<Incident> getIncidentByBORO(int boro);
+
 }
 
 
