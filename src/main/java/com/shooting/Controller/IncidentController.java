@@ -2,7 +2,6 @@ package com.shooting.Controller;
 
 import com.shooting.Model.Incident;
 import com.shooting.Service.IncidentService;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
