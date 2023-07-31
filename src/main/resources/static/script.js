@@ -11,22 +11,21 @@ document.addEventListener('DOMContentLoaded', () => {
             .then(data => displayData(data))
             .catch(error => {
                 console.error('Error fetching data:', error);
-                displayErrorMessage();
+                displayErrorMessage('Error fetching data. Please try again later.');
             });
     }
 
     // Function to create a delete button and add it to the row
-    function createDeleteButton(incidentKey) {
+    function createDeleteButton(incidentId) {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
         deleteButton.className = 'deleteButton';
         deleteButton.addEventListener('click', () => {
-            deleteIncident(incidentKey);
+            deleteIncident(incidentId); // Call the deleteIncident function when the button is clicked
         });
         return deleteButton;
     }
 
-    // Function to display data in the table
     // Function to display data in the table
     function displayData(data) {
         const tableBody = document.querySelector('#incidentTable tbody');
@@ -56,11 +55,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Function to fetch data based on search criteria
+    function searchIncident(incidentKey) {
+        fetch(`/Incident/key/${incidentKey}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                if (data === null) {
+                    displayErrorMessage('Incident not found');
+                } else {
+                    displayData(data);
+                }
+            })
+            .catch(error => {
+                console.error('Error searching data:', error);
+                displayErrorMessage('Error searching for incident');
+            });
+    }
 
     // Function to display an error message in the table if data fetching fails
-    function displayErrorMessage() {
+    function displayErrorMessage(message) {
         const tableBody = document.querySelector('#incidentTable tbody');
-        tableBody.innerHTML = '<tr><td colspan="6">Error fetching data. Please try again later.</td></tr>';
+        tableBody.innerHTML = `<tr><td colspan="6">${message}</td></tr>`;
     }
 
     // Function to save the incident data to the server
@@ -92,13 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
             })
             .catch(error => {
                 console.error('Error creating incident:', error);
-                displayErrorMessage();
+                displayErrorMessage('Error creating incident');
             });
     }
 
-    // Function to delete an incident by its key
-    function deleteIncident(incidentKey) {
-        fetch(`/Incident/${incidentKey}`, {
+    // Function to delete an incident by its ID
+    function deleteIncident(incidentId) {
+        fetch(`/Incident/${incidentId}`, {
             method: 'DELETE',
         })
             .then(response => {
@@ -108,28 +128,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 return response.json();
             })
             .then(data => {
-                console.log('Incident deleted successfully:', data);
+                console.log('Incident deleted successfully:', data.message); // Access the message property from the JSON response
                 fetchData(); // Fetch and display data again to update the table
             })
             .catch(error => {
-                console.error('Error deleting incident:', error);
-                displayErrorMessage();
-            });
-    }
-
-    // Function to fetch data based on search criteria
-    function searchIncident(incidentKey) {
-        fetch(`/Incident/key/${incidentKey}`)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => displayData(data))
-            .catch(error => {
-                console.error('Error searching data:', error);
-                displayErrorMessage();
+                console.error('Error deleting incident:', error.message); // Access the error message
+                displayErrorMessage('Error deleting incident');
             });
     }
 

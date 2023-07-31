@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -56,7 +57,12 @@ public class IncidentService {
     }
 
     public String deleteIncident(String incidentId) {
-        repository.deleteById(incidentId);
-        return "The Incident has been Deleted: ";
+        Optional<Incident> incidentOptional = repository.findById(incidentId);
+        if (incidentOptional.isPresent()) {
+            repository.deleteById(incidentId);
+            return "Incident deleted successfully";
+        } else {
+            return "Incident not found"; // Return an appropriate message if the incident does not exist
+        }
     }
 }
