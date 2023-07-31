@@ -41,21 +41,6 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = '<tr><td colspan="6">Error fetching data. Please try again later.</td></tr>';
     }
 
-    // Function to display a confirmation message when a new incident is added
-    function displayConfirmationMessage() {
-        const notification = document.createElement('div');
-        notification.textContent = 'New incident added successfully!';
-        notification.classList.add('confirmation-message');
-
-        // Append the notification to the body
-        document.body.appendChild(notification);
-
-        // Remove the notification after a few seconds (e.g., 3 seconds)
-        setTimeout(() => {
-            notification.remove();
-        }, 3000);
-    }
-
     // Show incident form when "Add" button is clicked
     const addButton = document.getElementById('addButton');
     const incidentForm = document.getElementById('incidentForm');
@@ -70,6 +55,7 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); // Prevent the default form submission
 
         // Get values from the form
+        const incidentKeyInput = document.getElementById('incidentKey');
         const incidentDateInput = document.getElementById('incidentDate');
         const victimRaceInput = document.getElementById('victimRace');
         const victimSexInput = document.getElementById('victimSex');
@@ -78,6 +64,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Create an object with the incident data
         const newIncident = {
+            "incident_KEY": incidentKeyInput.value.trim(),
             "occur_DAT": incidentDateInput.value.trim(),
             "vic_RACE": victimRaceInput.value.trim(),
             "vic_SEX": victimSexInput.value.trim(),
@@ -85,36 +72,17 @@ document.addEventListener('DOMContentLoaded', () => {
             "precint": parseInt(precinctInput.value.trim()) || 0
         };
 
-        // Send the newIncident object to your server
-        fetch('/Incident', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(newIncident),
-        })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Error creating incident.');
-                }
-                return response.json();
-            })
-            .then(createdIncident => {
-                console.log('Incident created successfully:', createdIncident);
-                // After successfully adding the incident, you may want to clear the form and update the incident table.
-                incidentDateInput.value = '';
-                victimRaceInput.value = '';
-                victimSexInput.value = '';
-                boroughInput.value = '';
-                precinctInput.value = '';
-                incidentForm.style.display = 'none';
-                fetchData(); // Fetch and display data again to update the table
-                displayConfirmationMessage(); // Display the confirmation message
-            })
-            .catch(error => {
-                console.error('Error creating incident:', error);
-                // Handle the error here if needed
-            });
+        // Here, you can send the newIncident object to your server using fetch() or other methods to save it to the database.
+
+        // After successfully adding the incident, you may want to clear the form and update the incident table.
+        incidentKeyInput.value = '';
+        incidentDateInput.value = '';
+        victimRaceInput.value = '';
+        victimSexInput.value = '';
+        boroughInput.value = '';
+        precinctInput.value = '';
+        incidentForm.style.display = 'none';
+        fetchData(); // Fetch and display data again to update the table
     });
 
     // Fetch data on page load

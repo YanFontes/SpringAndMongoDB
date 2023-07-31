@@ -20,7 +20,6 @@ public class IncidentController {
     @ResponseStatus(HttpStatus.CREATED)
     public Incident createIncident(@RequestBody Incident incident) {
         return service.addIncident(incident);
-
     }
 
     @GetMapping

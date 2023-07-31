@@ -8,48 +8,6 @@ table {
     width: 100%;
 }
 
-/* Add this CSS to style the confirmation message */
-.confirmation-message {
-    position: fixed;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    background-color: #4caf50;
-    color: #fff;
-    padding: 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    z-index: 9999;
-}
-
-
-#addButton {
-    display: block;
-    margin: 20px auto;
-    padding: 10px 20px;
-    background-color: #007BFF;
-    color: #fff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-    transition: background-color 0.3s ease-in-out;
-}
-
-#addButton:hover {
-    background-color: #0056b3;
-}
-
-#addButton:focus {
-    outline: none;
-    background-color: #0056b3;
-}
-
-/* Add some space between the button and the form */
-#incidentForm {
-    margin-top: 20px;
-}
-
 th, td {
     border: 1px solid #dddddd;
     text-align: left;
