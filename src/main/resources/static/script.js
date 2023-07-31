@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Fetching data
+    // Function to fetch data
     function fetchData() {
         fetch('/Incident') // API Endpoint
             .then(response => {
@@ -41,6 +41,39 @@ document.addEventListener('DOMContentLoaded', () => {
         tableBody.innerHTML = '<tr><td colspan="6">Error fetching data. Please try again later.</td></tr>';
     }
 
+    // Function to save the incident data to the server
+    function saveIncident(incidentData) {
+        fetch('/Incident', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(incidentData)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // After successfully adding the incident, you may want to clear the form and update the incident table.
+                const incidentForm = document.getElementById('incidentForm');
+                incidentForm.style.display = 'none';
+
+                // Clear input fields
+                const formInputs = incidentForm.querySelectorAll('input');
+                formInputs.forEach(input => input.value = '');
+
+                // Fetch and display data again to update the table
+                fetchData();
+            })
+            .catch(error => {
+                console.error('Error creating incident:', error);
+                displayErrorMessage();
+            });
+    }
+
     // Show incident form when "Add" button is clicked
     const addButton = document.getElementById('addButton');
     const incidentForm = document.getElementById('incidentForm');
@@ -55,16 +88,14 @@ document.addEventListener('DOMContentLoaded', () => {
         event.preventDefault(); // Prevent the default form submission
 
         // Get values from the form
-        const incidentKeyInput = document.getElementById('incidentKey');
         const incidentDateInput = document.getElementById('incidentDate');
         const victimRaceInput = document.getElementById('victimRace');
         const victimSexInput = document.getElementById('victimSex');
         const boroughInput = document.getElementById('borough');
         const precinctInput = document.getElementById('precinct');
 
-        // Create an object with the incident data
+        // Create an object with the incident data (without the incidentKey)
         const newIncident = {
-            "incident_KEY": incidentKeyInput.value.trim(),
             "occur_DAT": incidentDateInput.value.trim(),
             "vic_RACE": victimRaceInput.value.trim(),
             "vic_SEX": victimSexInput.value.trim(),
@@ -73,16 +104,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         // Here, you can send the newIncident object to your server using fetch() or other methods to save it to the database.
-
-        // After successfully adding the incident, you may want to clear the form and update the incident table.
-        incidentKeyInput.value = '';
-        incidentDateInput.value = '';
-        victimRaceInput.value = '';
-        victimSexInput.value = '';
-        boroughInput.value = '';
-        precinctInput.value = '';
-        incidentForm.style.display = 'none';
-        fetchData(); // Fetch and display data again to update the table
+        saveIncident(newIncident);
     });
 
     // Fetch data on page load
