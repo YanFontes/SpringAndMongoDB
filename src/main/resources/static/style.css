@@ -1,6 +1,20 @@
 body {
     font-family: Arial, sans-serif;
     margin: 20px;
+    background-color: #f0f0f0;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
 }
 
 table {
@@ -8,25 +22,20 @@ table {
     width: 100%;
 }
 
-th, td {
+th,
+td {
     border: 1px solid #dddddd;
     text-align: left;
-    padding: 12px; /* Increase padding for better spacing */
+    padding: 12px;
 }
 
 th {
     background-color: #f2f2f2;
 }
 
-/* Apply some hover effect to the table rows */
 tbody tr:hover {
     background-color: #f2f2f2;
     cursor: pointer;
-}
-
-/* Add a little box-shadow to the table */
-table {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 /* Center the table header */
@@ -39,7 +48,6 @@ tbody td {
     text-align: center;
 }
 
-/* Style the table header and body separately for better readability */
 thead {
     background-color: #e0e0e0;
 }
@@ -48,19 +56,37 @@ tbody {
     background-color: #f9f9f9;
 }
 
-/* Style the heading */
-h1 {
-    text-align: center;
-    margin-top: 20px;
-}
-
 /* Responsive styles for the table on smaller screens */
 @media screen and (max-width: 768px) {
     table {
         font-size: 14px;
     }
 
-    th, td {
+    th,
+    td {
         padding: 10px;
     }
+}
+
+/* Style the "Add Incident" button */
+#addButton {
+    display: block;
+    margin: 20px auto;
+    padding: 12px 20px;
+    font-size: 16px;
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+#addButton:hover {
+    background-color: #0056b3;
+}
+
+/* Center the incident form */
+#incidentForm {
+    text-align: center;
 }

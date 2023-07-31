@@ -15,6 +15,17 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    // Function to create a delete button and add it to the row
+    function createDeleteButton(incidentKey) {
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.className = 'deleteButton';
+        deleteButton.addEventListener('click', () => {
+            deleteIncident(incidentKey);
+        });
+        return deleteButton;
+    }
+
     // Function to display data in the table
     function displayData(data) {
         const tableBody = document.querySelector('#incidentTable tbody');
@@ -30,6 +41,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 cell.textContent = incident[key] !== null ? incident[key] : 'N/A';
                 row.appendChild(cell);
             });
+
+            // Add a delete button to the row
+            const deleteButton = createDeleteButton(incident['incident_KEY']);
+            const deleteCell = document.createElement('td');
+            deleteCell.appendChild(deleteButton);
+            row.appendChild(deleteCell);
 
             tableBody.appendChild(row);
         });
@@ -63,13 +80,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Clear input fields
                 const formInputs = incidentForm.querySelectorAll('input');
-                formInputs.forEach(input => input.value = '');
+                formInputs.forEach(input => (input.value = ''));
 
                 // Fetch and display data again to update the table
                 fetchData();
             })
             .catch(error => {
                 console.error('Error creating incident:', error);
+                displayErrorMessage();
+            });
+    }
+
+    // Function to delete an incident by its key
+    function deleteIncident(incidentKey) {
+        fetch(`/Incident/${incidentKey}`, {
+            method: 'DELETE',
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error deleting incident');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Incident deleted successfully:', data);
+                fetchData(); // Fetch and display data again to update the table
+            })
+            .catch(error => {
+                console.error('Error deleting incident:', error);
                 displayErrorMessage();
             });
     }
@@ -84,7 +122,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle form submission
     const submitButton = document.getElementById('submitButton');
-    submitButton.addEventListener('click', (event) => {
+    submitButton.addEventListener('click', event => {
         event.preventDefault(); // Prevent the default form submission
 
         // Get values from the form
@@ -96,11 +134,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Create an object with the incident data (without the incidentKey)
         const newIncident = {
-            "occur_DAT": incidentDateInput.value.trim(),
-            "vic_RACE": victimRaceInput.value.trim(),
-            "vic_SEX": victimSexInput.value.trim(),
-            "boro": boroughInput.value.trim(),
-            "precint": parseInt(precinctInput.value.trim()) || 0
+            occur_DAT: incidentDateInput.value.trim(),
+            vic_RACE: victimRaceInput.value.trim(),
+            vic_SEX: victimSexInput.value.trim(),
+            boro: boroughInput.value.trim(),
+            precint: parseInt(precinctInput.value.trim()) || 0,
         };
 
         // Here, you can send the newIncident object to your server using fetch() or other methods to save it to the database.
