@@ -1,7 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
-    // Function to fetch data
+    // Function to fetch incident data from the server
     function fetchData() {
-        fetch('/Incident') // API Endpoint
+        // Fetch data from the API endpoint "/Incident"
+        fetch('/Incident')
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -15,7 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
-    // Function to create a delete button and add it to the row
+    // Function to create a delete button for each incident and add it to the table row
     function createDeleteButton(incidentId) {
         const deleteButton = document.createElement('button');
         deleteButton.textContent = 'Delete';
@@ -26,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return deleteButton;
     }
 
-    // Function to display data in the table
+    // Function to display incident data in the table
     function displayData(data) {
         const tableBody = document.querySelector('#incidentTable tbody');
         tableBody.innerHTML = ''; // Clear the table body before appending new data
@@ -55,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Function to fetch data based on search criteria
+    // Function to fetch data based on the incident key search criteria
     function searchIncident(incidentKey) {
         fetch(`/Incident/key/${incidentKey}`)
             .then(response => {
@@ -106,6 +107,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Clear input fields
                 const formInputs = incidentForm.querySelectorAll('input');
                 formInputs.forEach(input => (input.value = ''));
+
+                // Show confirmation message
+                const confirmationMessage = document.getElementById('confirmationMessage');
+                confirmationMessage.textContent = 'Incident added successfully!';
+                confirmationMessage.style.display = 'block';
 
                 // Fetch and display data again to update the table
                 fetchData();
@@ -183,6 +189,85 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchData(); // If search bar is empty, fetch all incidents again to reset the table
         }
     });
+
+    // Additional code for the "Edit" button click
+    function editIncident(incidentId) {
+        // Fetch the incident data for the specific incidentId using API call (GET request)
+        fetch(`/Incident/${incidentId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                // Populate the form fields with the fetched data
+                document.getElementById('incidentDate').value = data.occur_DAT;
+                document.getElementById('victimRace').value = data.vic_RACE;
+                document.getElementById('victimSex').value = data.vic_SEX;
+                document.getElementById('borough').value = data.boro;
+                document.getElementById('precinct').value = data.precint;
+
+                // Display the incident form and set it in edit mode
+                const incidentForm = document.getElementById('incidentForm');
+                incidentForm.style.display = 'block';
+                incidentForm.dataset.incidentId = incidentId;
+            })
+            .catch(error => {
+                console.error('Error fetching incident data:', error);
+                displayErrorMessage('Error fetching incident data. Please try again later.');
+            });
+    }
+
+    // Function to handle the "Save" button click and update the incident
+    function saveUpdatedIncident() {
+        const incidentForm = document.getElementById('incidentForm');
+        const incidentId = incidentForm.dataset.incidentId;
+        const updatedIncident = {
+            occur_DAT: document.getElementById('incidentDate').value.trim(),
+            vic_RACE: document.getElementById('victimRace').value.trim(),
+            vic_SEX: document.getElementById('victimSex').value.trim(),
+            boro: document.getElementById('borough').value.trim(),
+            precint: parseInt(document.getElementById('precinct').value.trim()) || 0,
+        };
+
+        // Send the updated incident data to the server using an API call (PUT request)
+        fetch(`/Incident/${incidentId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(updatedIncident)
+        })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error updating incident');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Incident updated successfully:', data.message); // Access the message property from the JSON response
+
+                // Hide the incident form after successful update
+                incidentForm.style.display = 'none';
+
+                // Clear input fields
+                const formInputs = incidentForm.querySelectorAll('input');
+                formInputs.forEach(input => (input.value = ''));
+
+                // Display confirmation after Incident updated
+                const confirmationMessage = document.getElementById('confirmationMessage');
+                confirmationMessage.textContent = 'Incident updated successfully!';
+                confirmationMessage.style.display = 'block';
+
+                // Fetch and display data again to update the table
+                fetchData();
+            })
+            .catch(error => {
+                console.error('Error updating incident:', error.message); // Access the error message
+                displayErrorMessage('Error updating incident');
+            });
+    }
 
     // Fetch data on page load
     fetchData();
