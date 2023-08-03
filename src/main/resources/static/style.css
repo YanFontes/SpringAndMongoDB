@@ -1,115 +1,176 @@
-body {
-    font-family: "Roboto", Arial, sans-serif; /* Use a modern font-family */
-    margin: 20px;
-    background-color: #f0f0f0;
-    color: #333333; /* Set the text color */
+/* Reset default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
+/* Body background and text styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Change to desired font */
+    background-color: #f5f5f5;
+    color: #333;
+}
+
+/* Container styles */
 .container {
-    max-width: 800px;
+    max-width: 960px;
     margin: 0 auto;
     padding: 20px;
-    background-color: #ffffff;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
+/* Header styles */
 h1 {
-    text-align: center;
     margin-bottom: 20px;
-    color: #007bff; /* Set the header color */
-}
-
-table {
-    border-collapse: collapse;
-    width: 100%;
-}
-
-th,
-td {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 12px;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-tbody tr:hover {
-    background-color: #f2f2f2;
-    cursor: pointer;
-}
-
-/* Center the table header and cells */
-thead th,
-tbody td {
+    font-size: 28px;
     text-align: center;
 }
 
-thead {
-    background-color: #e0e0e0;
+/* Form styles */
+form {
+    margin-bottom: 20px;
 }
 
-tbody {
-    background-color: #f9f9f9;
-}
-
-/* Responsive styles for the table on smaller screens */
-@media screen and (max-width: 768px) {
-    table {
-        font-size: 14px;
-    }
-
-    th,
-    td {
-        padding: 10px;
-    }
-}
-
-/* Style the "Add Incident" button */
-#addButton {
+form label {
     display: block;
-    margin: 20px auto;
-    padding: 12px 20px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: #ffffff;
+    margin-bottom: 5px;
+}
+
+form input[type="text"],
+form input[type="number"],
+form input[type="date"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+form button {
+    padding: 8px 16px;
+    background-color: #4caf50; /* Green color */
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Change font for buttons */
 }
 
-#addButton:hover {
-    background-color: #0056b3;
-}
-
-/* Center the incident form */
-#incidentForm {
-    text-align: center;
-}
-
-/* Style the search bar */
+/* Search bar styles */
 #searchKey {
+    width: 60%;
     padding: 8px;
     border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-right: 10px;
+    border-radius: 20px;
 }
 
 #searchButton {
     padding: 8px 16px;
-    background-color: #4CAF50;
-    color: #ffffff;
+    background-color: #4caf50; /* Green color */
+    color: #fff;
     border: none;
-    border-radius: 5px;
+    border-radius: 20px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Change font for buttons */
+    margin-left: 10px; /* Add margin for spacing */
 }
 
-#searchButton:hover {
-    background-color: #45a049;
+#addButton {
+    width: auto;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
 }
 
-/*aaaa*/
+#addButton {
+    padding: 8px 16px;
+    background-color: #4caf50; /* Green color */
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Change font for buttons */
+    margin-left: 2px; /* Add margin for spacing */
+}
 
+
+/* Table styles */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table th,
+table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #f0f0f0;
+    font-weight: 500;
+}
+
+/* Apply alternating row colors */
+table tbody tr:nth-child(even) {
+    background-color: #f5f5f5; /* Light gray */
+}
+
+/* Sort icon styles */
+.sort-icon {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    vertical-align: middle;
+    margin-right: 5px; /* Add margin-right for spacing */
+}
+
+table th:hover .sort-icon,
+table th.active-sort .sort-icon { /* Show sort icon on hover and when column is sorted */
+    opacity: 1;
+}
+
+.sort-icon.sorted-asc::after {
+    content: "▲";
+    opacity: 1;
+}
+
+.sort-icon.sorted-desc::after {
+    content: "▼";
+    opacity: 1;
+}
+
+/* Confirmation message styles */
+#confirmationMessage {
+    display: none;
+    margin-top: 10px;
+    padding: 10px;
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: #155724;
+    border-radius: 4px;
+}
+
+/* Delete button styles */
+.deleteButton {
+    padding: 4px 8px;
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+/* Responsive styles */
+@media screen and (max-width: 600px) {
+    form label,
+    form input[type="text"],
+    form input[type="number"],
+    form input[type="date"],
+    form button {
+        width: 100%;
+    }
+    #searchKey {
+        width: 100%;
+    }
+}

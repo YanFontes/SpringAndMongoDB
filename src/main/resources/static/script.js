@@ -181,6 +181,9 @@ document.addEventListener('DOMContentLoaded', () => {
     searchButton.addEventListener('click', () => {
         const searchKeyInput = document.getElementById('searchKey');
         const searchKey = searchKeyInput.value.trim();
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        confirmationMessage.textContent = `Searching for incident with key: ${searchKey}`;
+
 
         // Check if the searchKey is not empty before making the search request
         if (searchKey !== '') {
@@ -189,6 +192,16 @@ document.addEventListener('DOMContentLoaded', () => {
             fetchData(); // If search bar is empty, fetch all incidents again to reset the table
         }
     });
+
+    // Function to add the
+    function searchByKey() {
+        const searchKey = document.getElementById('searchKey').value;
+        // Add your search logic here
+        // For demonstration purposes, displaying a confirmation message
+        const confirmationMessage = document.getElementById('confirmationMessage');
+        confirmationMessage.textContent = `Searching for incident with key: ${searchKey}`;
+        confirmationMessage.style.display = 'block';
+    }
 
     // Additional code for the "Edit" button click
     function editIncident(incidentId) {
@@ -218,6 +231,56 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayErrorMessage('Error fetching incident data. Please try again later.');
             });
     }
+
+    // Function to sort table columns
+    function sortTable(columnIndex, sortingOrder) {
+        const table = document.getElementById('incidentTable');
+        const rows = Array.from(table.querySelectorAll('tbody tr'));
+
+        rows.sort((a, b) => {
+            const cellA = a.cells[columnIndex].textContent;
+            const cellB = b.cells[columnIndex].textContent;
+
+            // Use the sortingOrder to determine sorting direction
+            if (sortingOrder === 'asc') {
+                return cellA.localeCompare(cellB);
+            } else {
+                return cellB.localeCompare(cellA);
+            }
+        });
+
+        table.querySelector('tbody').innerHTML = ''; // Clear existing rows
+
+        rows.forEach(row => {
+            table.querySelector('tbody').appendChild(row);
+        });
+    }
+
+
+    const sortingDirections = Array.from({ length: 6 }, () => null);
+
+    // Keep track of sorting order for each column
+    const sortingOrders = Array.from({ length: 6 }, () => 'asc'); // Change the length to match the number of columns
+
+    document.querySelectorAll('#incidentTable th').forEach((header, index) => {
+        header.addEventListener('click', () => {
+            // Toggle sorting order
+            sortingOrders[index] = sortingOrders[index] === 'asc' ? 'desc' : 'asc';
+
+            // Update sorting icon
+            document.querySelectorAll('#incidentTable th .sort-icon').forEach((icon, iconIndex) => {
+                icon.classList.remove('sorted-asc', 'sorted-desc');
+                if (iconIndex === index) {
+                    icon.classList.add(`sorted-${sortingOrders[index]}`);
+                }
+            });
+
+            sortTable(index, sortingOrders[index]);
+        });
+    });
+
+
+
 
     // Function to handle the "Save" button click and update the incident
     function saveUpdatedIncident() {
@@ -268,6 +331,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayErrorMessage('Error updating incident');
             });
     }
+
+
 
     // Fetch data on page load
     fetchData();
