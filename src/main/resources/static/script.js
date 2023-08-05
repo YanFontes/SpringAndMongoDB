@@ -1,4 +1,40 @@
 document.addEventListener('DOMContentLoaded', () => {
+
+    // Function to create and insert the header
+    function createHeader() {
+        const header = document.createElement('header');
+        header.innerHTML = `
+            <h1>Incident Management System</h1>
+            <nav>
+                <ul>
+                    <li><a href="https://www.kaggle.com/datasets/debjeetdas/nypd-shooting-incident-data">Dataset</a></li>
+                    <li><a href="http://localhost:8080/Incident">JSON Data</a></li>
+                    <li><a href="https://github.com/YanFontes/SpringAndMongoDB/tree/FixBrokeCode">Github Project</a></li>      
+                    <li><button id="exportButton" class="exportButton">Export Data</button></li>
+                </ul>
+            </nav>
+        `;
+        document.body.insertBefore(header, document.body.firstChild);
+
+        // Add an event listener to the export button
+        const exportButton = document.getElementById('exportButton');
+        exportButton.addEventListener('click', handleExportButtonClick);
+    }
+
+    // Function to create and insert the footer
+    function createFooter() {
+        const footer = document.createElement('footer');
+        footer.innerHTML = `
+            <p>&copy; ${new Date().getFullYear()} Incident Management System</p>
+        `;
+        document.body.appendChild(footer);
+    }
+
+    // Call the functions to create and insert header and footer
+    createHeader();
+    createFooter();
+
+
     // Function to fetch incident data from the server
     function fetchData() {
         // Fetch data from the API endpoint "/Incident"
@@ -279,9 +315,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-
-
-
     // Function to handle the "Save" button click and update the incident
     function saveUpdatedIncident() {
         const incidentForm = document.getElementById('incidentForm');
@@ -331,7 +364,58 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayErrorMessage('Error updating incident');
             });
     }
+    function generateCSV(dataArray) {
+        const header = ['incident_KEY', 'occur_DAT', 'vic_RACE', 'vic_SEX', 'boro', 'precint'];
+        const csvRows = [header.join(',')];
 
+        dataArray.forEach(incident => {
+            const values = header.map(key => {
+                const value = incident[key] !== null ? incident[key] : 'N/A';
+                return `"${value}"`;
+            });
+            csvRows.push(values.join(','));
+        });
+
+        return csvRows.join('\n');
+    }
+
+    // Function to initiate download of CSV file
+    function downloadCSVFile(csvContent) {
+        const blob = new Blob([csvContent], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = 'incident_data.csv';
+        link.style.display = 'none';
+        document.body.appendChild(link);
+
+        link.click();
+
+        // Clean up
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    }
+
+    // Function to handle the "Export Data" button click
+    function handleExportButtonClick() {
+        // Fetch data from the API endpoint "/Incident"
+        fetch('/Incident')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json();
+            })
+            .then(data => {
+                const csvContent = generateCSV(data);
+                downloadCSVFile(csvContent);
+            })
+            .catch(error => {
+                console.error('Error fetching data:', error);
+                displayErrorMessage('Error fetching data. Please try again later.');
+            });
+    }
 
 
     // Fetch data on page load
