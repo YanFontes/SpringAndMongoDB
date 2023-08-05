@@ -1,5 +1,15 @@
 document.addEventListener('DOMContentLoaded', () => {
 
+    const loadingContainer = document.getElementById('loadingContainer');
+
+    function showLoadingSpinner() {
+        loadingContainer.style.display = 'flex';
+    }
+
+    function hideLoadingSpinner() {
+        loadingContainer.style.display = 'none';
+    }
+
     // Function to create and insert the header
     function createHeader() {
         const header = document.createElement('header');
@@ -37,6 +47,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to fetch incident data from the server
     function fetchData() {
+
+        showLoadingSpinner(); // Show spinner before fetching data
+
         // Fetch data from the API endpoint "/Incident"
         fetch('/Incident')
             .then(response => {
@@ -45,10 +58,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
                 return response.json();
             })
-            .then(data => displayData(data))
+            .then(data => {
+                hideLoadingSpinner(); // Hide spinner after fetch is complete
+                displayData(data);
+            })
             .catch(error => {
                 console.error('Error fetching data:', error);
                 displayErrorMessage('Error fetching data. Please try again later.');
+                hideLoadingSpinner(); // Hide spinner in case of an error
             });
     }
 
